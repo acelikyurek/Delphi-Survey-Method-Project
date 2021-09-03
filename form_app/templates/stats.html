@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Forms App</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' type='text/css' media='screen' href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-info">
+    <div class="container">
+      <div class="collapse navbar-collapse" id="navbarText">
+        <a class="navbar-brand" href="/">Forms App</a>
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_superuser %}
+            <li class="nav-item">
+              <a href="{% url 'stats' %}" class="nav-link">Statistics</a>
+            </li>
+          {% endif %}
+          <li class="nav-item">
+            <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container mt-3">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <th style="text-align: center; vertical-align: middle;" rowspan="2" width="25%">Users</th>
+          <th style="text-align: center;" colspan="6">Rounds</th>
+        </tr>
+        <tr>
+          <th style="text-align: center;" width="12.5%">Round #1</th>
+          <th style="text-align: center;" width="12.5%">Round #2</th>
+          <th style="text-align: center;" width="12.5%">Round #3</th>
+          <th style="text-align: center;" width="12.5%">Round #4</th>
+          <th style="text-align: center;" width="12.5%">Round #5</th>
+          <th style="text-align: center;" width="12.5%">Round #6</th>
+        </tr>    
+        {% for user, first, second, third, fourth, fifth, sixth in listOfArgs %}
+          <tr>
+            <td style="text-align: center;">{{user.username}}</td>
+            <td style="text-align: center;">{% if first == 0 %}<span class="text-success">&#10003</span>{% elif first == 1 %}<span class="text-danger">&#10005</span>{% else %}<span class="text-dark">&#9135</span>{% endif %}</td>
+            <td style="text-align: center;">{% if second == 0 %}<span class="text-success">&#10003</span>{% elif second == 1 %}<span class="text-danger">&#10005</span>{% else %}<span class="text-dark">&#9135</span>{% endif %}</td>
+            <td style="text-align: center;">{% if third == 0 %}<span class="text-success">&#10003</span>{% elif third == 1 %}<span class="text-danger">&#10005</span>{% else %}<span class="text-dark">&#9135</span>{% endif %}</td>
+            <td style="text-align: center;">{% if fourth == 0 %}<span class="text-success">&#10003</span>{% elif fourth == 1 %}<span class="text-danger">&#10005</span>{% else %}<span class="text-dark">&#9135</span>{% endif %}</td>
+            <td style="text-align: center;">{% if fifth == 0 %}<span class="text-success">&#10003</span>{% elif fifth == 1 %}<span class="text-danger">&#10005</span>{% else %}<span class="text-dark">&#9135</span>{% endif %}</td>
+            <td style="text-align: center;">{% if sixth == 0 %}<span class="text-success">&#10003</span>{% elif sixth == 1 %}<span class="text-danger">&#10005</span>{% else %}<span class="text-dark">&#9135</span>{% endif %}</td>
+          </tr>
+        {% endfor %}
+        <tr height="50px">
+          <td style="border-left-color: white; border-right-color: white;"></td>
+          <td style="border-left-color: white; border-right-color: white;"></td>
+          <td style="border-left-color: white; border-right-color: white;"></td>
+          <td style="border-left-color: white; border-right-color: white;"></td>
+          <td style="border-left-color: white; border-right-color: white;"></td>
+          <td style="border-left-color: white; border-right-color: white;"></td>
+          <td style="border-left-color: white; border-right-color: white;"></td>
+        </tr>
+        <tr>
+          <th style="text-align: center; vertical-align: middle;">Visibility</th>
+          <td style="text-align: center;">{% if type_one == 0 %}<a role="button" href="/close_forms/1" class="btn btn-outline-success btn-sm">Visible</a>{% elif type_one == 1 %}<a role="button" href="/open_forms/1" class="btn btn-outline-danger btn-sm">Hidden</a>{% else %}<a role="button" class="btn btn-outline-primary btn-sm disabled"><span class="text-primary">N/A</span></a>{% endif %}</td>
+          <td style="text-align: center;">{% if type_two == 0 %}<a role="button" href="/close_forms/2" class="btn btn-outline-success btn-sm">Visible</a>{% elif type_two == 1 %}<a role="button" href="/open_forms/2" class="btn btn-outline-danger btn-sm">Hidden</a>{% else %}<a role="button" class="btn btn-outline-primary btn-sm disabled"><span class="text-primary">N/A</span></a>{% endif %}</td>
+          <td style="text-align: center;">{% if type_three == 0 %}<a role="button" href="/close_forms/3" class="btn btn-outline-success btn-sm">Visible</a>{% elif type_three == 1 %}<a role="button" href="/open_forms/3" class="btn btn-outline-danger btn-sm">Hidden</a>{% else %}<a role="button" class="btn btn-outline-primary btn-sm disabled"><span class="text-primary">N/A</span></a>{% endif %}</td>
+          <td style="text-align: center;">{% if type_four == 0 %}<a role="button" href="/close_forms/4" class="btn btn-outline-success btn-sm">Visible</a>{% elif type_four == 1 %}<a role="button" href="/open_forms/4" class="btn btn-outline-danger btn-sm">Hidden</a>{% else %}<a role="button" class="btn btn-outline-primary btn-sm disabled"><span class="text-primary">N/A</span></a>{% endif %}</td>
+          <td style="text-align: center;">{% if type_five == 0 %}<a role="button" href="/close_forms/5" class="btn btn-outline-success btn-sm">Visible</a>{% elif type_five == 1 %}<a role="button" href="/open_forms/5" class="btn btn-outline-danger btn-sm">Hidden</a>{% else %}<a role="button" class="btn btn-outline-primary btn-sm disabled"><span class="text-primary">N/A</span></a>{% endif %}</td>
+          <td style="text-align: center;">{% if type_six == 0 %}<a role="button" href="/close_forms/6" class="btn btn-outline-success btn-sm">Visible</a>{% elif type_six == 1 %}<a role="button" href="/open_forms/6" class="btn btn-outline-danger btn-sm">Hidden</a>{% else %}<a role="button" class="btn btn-outline-primary btn-sm disabled"><span class="text-primary">N/A</span></a>{% endif %}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-bottom: 100px;"></div>
+</body>
+</html>

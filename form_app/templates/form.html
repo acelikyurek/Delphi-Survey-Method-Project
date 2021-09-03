@@ -1,0 +1,103 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Forms App</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' type='text/css' media='screen' href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-info">
+    <div class="container">
+      <div class="collapse navbar-collapse" id="navbarText">
+        <a class="navbar-brand mr-auto" href="/">Forms App</a>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="my-4" style="font-size:3vw">{{form.title}}</div>
+    <div class="mb-4" style="font-size:2.25vw">Round #{{form.type_id}}</div>
+    <div class="mb-4" style="font-size:1.5vw">Please indicate your views on the statements given below.</div>
+    <form method="post"> {% csrf_token %}
+      {% if form %}
+        {% for question, oa, fq, m, tq, iqr in listOfArgs %}
+          <div class="mb-2">{{forloop.counter}}. {{question.description}}</div>
+          <table class="table table-borderless w-auto" style="width: 90%;">
+            <div class="form-check">
+              <tbody>
+                <tr>
+                  <td style="padding-bottom: 0px; padding-left: 0px;"></td>
+                  <td style="padding-bottom: 0px; text-align: center;" class="form-check-label">1</td>
+                  <td style="padding-bottom: 0px; text-align: center;" class="form-check-label">2</td>
+                  <td style="padding-bottom: 0px; text-align: center;" class="form-check-label">3</td>
+                  <td style="padding-bottom: 0px; text-align: center;" class="form-check-label">4</td>
+                  <td style="padding-bottom: 0px; text-align: center;" class="form-check-label">5</td>
+                  <td style="padding-bottom: 0px; text-align: center;" class="form-check-label">6</td>
+                  <td style="padding-bottom: 0px; text-align: center;" class="form-check-label">7</td>
+                  <td style="padding-bottom: 0px; padding-right: 0px;"></td>
+                </tr>
+                <tr>
+                  <td style="padding-left: 0px"><label class="form-check-label">Strongly Disagree</label></td>
+                  <td><input type="radio" value="1" name="{{question.id}}"></td>
+                  <td><input type="radio" value="2" name="{{question.id}}"></td>
+                  <td><input type="radio" value="3" name="{{question.id}}"></td>
+                  <td><input type="radio" value="4" name="{{question.id}}"></td>
+                  <td><input type="radio" value="5" name="{{question.id}}"></td>
+                  <td><input type="radio" value="6" name="{{question.id}}"></td>
+                  <td><input type="radio" value="7" name="{{question.id}}"></td>
+                  <td style="padding-right: 0px"><label class="form-check-label">Strongly Agree</label></td>
+                </tr>
+              </tbody>
+            </div>
+          </table>
+          <div class="justify-content-center mb-3">Give your comments and explanations if exist:</div>
+          <input class="mb-4 px-1" style="width: 750px; border: 1px solid black;" placeholder="Yanıtınız" name="{{question.id}} comment">
+
+          {% if form.type_id > 1 %}
+            <table class="table table-bordered table-secondary" style="width: 750px;">
+              <tbody>
+                <tr>
+                  <td style="text-align: center;" colspan="5">Statistics from previous round for Question #{{forloop.counter}}</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center; vertical-align: middle;" width="20%">Your Previous Answer</td>
+                  <td style="text-align: center; vertical-align: middle;" width="20%">First Quartile</td>
+                  <td style="text-align: center; vertical-align: middle;" width="20%">Second Quartile (Median)</td>
+                  <td style="text-align: center; vertical-align: middle;" width="20%">Third Quartile</td>
+                  <td style="text-align: center; vertical-align: middle;" width="20%">Interquartile Range</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;">{{oa}}</td>
+                  <td style="text-align: center;">{{fq}}</td>
+                  <td style="text-align: center;">{{m}}</td>
+                  <td style="text-align: center;">{{tq}}</td>
+                  <td style="text-align: center;">{{iqr}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="mb-5"></div>
+          {% endif %}
+
+        {% endfor %}
+      {% endif %}
+      <div class="my-1"></div>
+      <button type="submit" class="btn btn-secondary mb-4">Complete Form</button>
+    </form>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="text-danger mb-4">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+  </div>
+
+</body>
+</html>
